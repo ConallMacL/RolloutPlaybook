@@ -42,6 +42,9 @@
     main{padding:0}
     .grid{grid-template-columns:1fr 1fr 1fr}
     .col{page-break-inside:avoid}
+    .bucket-done .kicker, .bucket-done h2 { text-decoration: line-through; opacity:.6 }
+li.part-done { text-decoration: line-through; opacity:.6 }
+.check { width:16px; height:16px; vertical-align:-2px; margin-right:6px; cursor:pointer }
   }
 </style>
 </head>
@@ -70,32 +73,15 @@
 </footer>
 
 <script>
-/* ====== MASTER DATA (your tasks) ====== */
-const MASTER = {"generated_from":"Rollout Playbook (1).xlsx","tasks":[
-{"id":"1vhy_lhX6EyJS1UjZLY0OpYACA9d","title":"Technical - IT","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":"2026-02-22","start":null},
-{"id":"2j-j36sTh02tVJ3GreVJ35YAOaA1","title":"Identify goals and objectives","bucket":"Prepping for Rollout","label":"Digital Lead","notes":"","checklist":["Review CPD content — confident staff will know what to do on Day 1.","Share pupil induction lessons (iPad care, agreements).","Staff understand process/system around breakages.","Promote Apple Teacher programme to staff.","Adapt Comms for your school to parents"],"due":null,"start":null},
-{"id":"8mlMW5no8kqwdD4fU8bE1JYABG50","title":"SLT","bucket":"Rollout","label":"SLT","notes":"","checklist":["Student agreements signed and logged.","Senior SLT link identified to support and guide the Digital Lead.","All SLT onboard with Narrative (read/adapt cheat sheet!)","Lead visible messaging: “This is about teaching and learning, not tech."],"due":null,"start":null},
-{"id":"D-AqqtD09U2I7G1xbrmEfJYAKwWx","title":"Strategic - Cross-School/Outside Liaison*- DLA","bucket":"Roles ","label":null,"notes":"Also available to support Digital Learning Lead upon request.","checklist":[],"due":null,"start":null},
-{"id":"Ew1S2s5k1kyxXy3cptZD9ZYAPFsj","title":"Ownership/Vision/Operational Oversight - SLT","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":null,"start":null},
-{"id":"GAh6fcINTE2xu88ypBAUwJYADL3E","title":"IT","bucket":"Rollout","label":"IT","notes":"","checklist":["First Weeks - on hand to support troubleshooting. Share solutions to common problems.","Regularly review (with SLT + DL) to resolve issues quickly.","Confirm apps are deployed and accessible. Devices are working as expected in the classroom."],"due":null,"start":null},
-{"id":"KaBwb0El5k62tR-tsVs015YAMFix","title":"Digital Lead","bucket":"Rollout","label":"Digital Lead","notes":"","checklist":["First point of contact for staff queries around Pedagogy.","Lead day-to-day CPD sessions in school (short inputs, Apple Teacher nudges).","Gauge staff digital maturity in an ongoing manner"],"due":null,"start":null},
-{"id":"LOiolTKpcEOQSQy9fW0SNJYAOuLs","title":"Digital Lead","bucket":"After Rollout","label":"Digital Lead","notes":"","checklist":["Onboard and mentor Digital Champions and Ambassadors.","Ensure digital practice is becoming embedded across year groups and departments.","Identify Best Practice."],"due":null,"start":null},
-{"id":"Qw-LE4-ddEWoo_bXKUptT5YAMU7Y","title":"SLT","bucket":"After Rollout","label":"SLT","notes":"","checklist":["Check in with stakeholders to direct future of digital learning.","Review digital learning impact as part of routine leadership review.","Continue proactive comms with parents and governors to show progress and value.","Embed digital into the School Development/Improvement Plan"],"due":null,"start":null},
-{"id":"aTHwxoCfLUO_2V-uGHmZMZYACUQ3","title":"DLA","bucket":"Rollout","label":"DLA","notes":"","checklist":["Check-ins with Digital Leads - 'How can I help?'","Troubleshoot barriers with DL/SLT/IT - add to existing resources to improve rollout system.","Co-deliver CPD sessions: frame pedagogy (MECC/PICRAT) and model Apple workflows."],"due":null,"start":null},
-{"id":"hWXZpBzPD0SWD2QFqJIPRpYAK1vF","title":"School Leadership","bucket":"Prepping for Rollout","label":"SLT","notes":"These are the whats, always think, 'who needs to know?'","checklist":["Who leads on these key strands: arranging CPD, pupil induction, parent comms, apps.","Parents have received clear comms (expectations, support, 5Ws).","Parents are clearly informed of the procedure around breakages (repairs, costs, replacement timeline","Training dates are scheduled and communicated to staff."],"due":null,"start":null},
-{"id":"oGVukcdBEUKKDMGCeSvQCpYAKwe1","title":"DLA","bucket":"After Rollout","label":"DLA","notes":"","checklist":["DMS - Digital Lead and relevant SLT informed","Arrange/Plan sessions for Digital Lead and Champions","Support Innovation projects.","Identify & Promote best practice - case study"],"due":null,"start":null},
-{"id":"sGuhNgGNXkaJcjY12fDr05YAMElz","title":"DLA","bucket":"Prepping for Rollout","label":"DLA","notes":"","checklist":["Check expectations and clarify support with SLT.","Provide Rollout Resource Pack"],"due":null,"start":null},
-{"id":"v5u087LLQ0OK6iIMp80pxpYAF7VI","title":"Operational and in-school - Digital Learning Lead","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":"2025-11-22","start":null},
-{"id":"wC-KABIUakeZnOCx1HcyPZYABOti","title":"IT","bucket":"After Rollout","label":"IT","notes":"","checklist":["Maintenance: Updates, Safeguarding, Security.","Termly check ins to ensure alignment.","Support expansion and streamlining of core apps in line with curriculum needs.","Reflect on this year's rollout to inform best practice next AY."],"due":null,"start":null},
-{"id":"y4tR6fEZQE2SRFzZFXfxI5YAGd0B","title":"IT","bucket":"Prepping for Rollout","label":"IT","notes":"","checklist":["Devices built/configured and core apps pushed to self-service.","CPD date confirmed so IT can provide support.","Any risks/setbacks in device readiness communicated to SLT.","School are aware of policies on breakages.","Are AppleTVs installed and staff able to Airplay."],"due":null,"start":null}
-]};
+/* ====== MASTER DATA (same as before) ====== */
+const MASTER = /* keep your existing MASTER JSON here */;
 
 /* ===== helpers ===== */
 const BUCKET_ORDER = ["Prepping for Rollout","Rollout","After Rollout","Roles "];
 const PLAN_KEY = new URLSearchParams(location.search).get('plan') || 'default';
 const STORAGE_KEY = `playbook_${PLAN_KEY}`;
 
-/* Load per-school JSON dates if provided (silent) */
+/* Silent loader for ?plan=… dates */
 async function loadPlanByUrl(url){
   try{
     const res = await fetch(url, {cache:'no-store'});
@@ -105,13 +91,13 @@ async function loadPlanByUrl(url){
     MASTER.tasks.forEach(t=>{
       if(map[t.id]){
         if(map[t.id].start) t.start = map[t.id].start;
-        if(map[t.id].due) t.due = map[t.id].due;
+        if(map[t.id].due)   t.due   = map[t.id].due;
       }
     });
-  }catch(e){ /* ignore */ }
+  }catch(_){}
 }
 
-/* Local storage of dates + done state (per plan) */
+/* Local state: dates, task done, parts (checklist) done array */
 function loadLocalState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -119,49 +105,85 @@ function loadLocalState(){
     const s = JSON.parse(raw);
     const map = s.byId || {};
     MASTER.tasks.forEach(t=>{
-      const v = map[t.id];
-      if(!v) return;
-      if('start' in v) t.start = v.start;
-      if('due' in v) t.due = v.due;
-      t.done = !!v.done;
+      const v = map[t.id]; if(!v) return;
+      t.start = v.start ?? t.start ?? null;
+      t.due   = v.due   ?? t.due   ?? null;
+      t.done  = !!v.done;
+      // restore parts (booleans aligned to checklist length)
+      if (Array.isArray(v.parts)) {
+        t.parts = v.parts.slice(0, (t.checklist||[]).length).map(Boolean);
+      }
     });
-  }catch(e){}
+  }catch(_){}
 }
 function saveLocalState(){
   const byId = {};
   MASTER.tasks.forEach(t=>{
-    byId[t.id] = {start:t.start||null, due:t.due||null, done:!!t.done};
+    byId[t.id] = {
+      start: t.start||null,
+      due:   t.due||null,
+      done:  !!t.done,
+      parts: (t.parts && t.parts.length) ? t.parts.map(Boolean) : []
+    };
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify({byId}));
 }
 
-/* Rendering */
+/* Utility: compute if a task counts as done */
+function isTaskDone(t){
+  const hasParts = Array.isArray(t.checklist) && t.checklist.length>0;
+  const partsAll = hasParts ? (Array.isArray(t.parts) && t.parts.length===t.checklist.length && t.parts.every(Boolean)) : false;
+  return !!(t.done || partsAll);
+}
+
+/* Grouping */
 function byBucket(tasks){
   const m = new Map(); BUCKET_ORDER.forEach(b=>m.set(b,[]));
   tasks.forEach(t=>m.set(t.bucket,(m.get(t.bucket)||[]).concat(t)));
   return m;
 }
 
+/* Render */
 function render(){
   const board = document.getElementById('board');
   board.innerHTML = '';
   const grouped = byBucket(MASTER.tasks);
+
   BUCKET_ORDER.forEach(bucket=>{
     const tasks = (grouped.get(bucket)||[]);
-    const col = document.createElement('div'); col.className='col';
+
+    // progress based on computed done
+    const doneCount = tasks.filter(isTaskDone).length;
+    const allDone   = tasks.length>0 && doneCount===tasks.length;
+
+    const col = document.createElement('div');
+    col.className = 'col' + (allDone ? ' bucket-done' : '');
     const title = bucket.trim()==="Prepping for Rollout" ? "Preparation & Alignment"
-                : bucket.trim()==="Rollout" ? "Stabilisation & Embedding"
-                : bucket.trim()==="After Rollout" ? "Sustainability & Growth" : "Roles";
-    const doneCount = tasks.filter(t=>t.done).length;
+                : bucket.trim()==="Rollout"             ? "Stabilisation & Embedding"
+                : bucket.trim()==="After Rollout"       ? "Sustainability & Growth"
+                : "Roles";
     col.innerHTML = `<div class="kicker">${bucket.trim()}</div>
                      <h2>${title}</h2>
                      <div class="progress">${doneCount}/${tasks.length} done</div>`;
+
     tasks.forEach(t=>{
-      const c = document.createElement('div');
-      c.className = 'card' + (t.done?' done':'');
-      c.innerHTML = `
+      // ensure parts array exists with same length as checklist
+      if (Array.isArray(t.checklist) && t.checklist.length){
+        if (!Array.isArray(t.parts)) t.parts = Array(t.checklist.length).fill(false);
+        if (t.parts.length !== t.checklist.length){
+          const newParts = Array(t.checklist.length).fill(false);
+          for (let i=0;i<Math.min(newParts.length, t.parts.length);i++) newParts[i]=!!t.parts[i];
+          t.parts = newParts;
+        }
+      } else {
+        t.parts = [];
+      }
+
+      const card = document.createElement('div');
+      card.className = 'card' + (isTaskDone(t)?' done':'');
+      card.innerHTML = `
         <div class="task-title">
-          <input type="checkbox" ${t.done?'checked':''} data-id="${t.id}" class="donebox" />
+          <input type="checkbox" class="donebox" data-id="${t.id}" ${t.done?'checked':''} />
           <span>${t.title}${t.label?` <span class="tag">${t.label}</span>`:''}</span>
         </div>
         ${t.notes?`<div class="notes" style="color:#475569;margin:6px 0">${t.notes}</div>`:''}
@@ -169,42 +191,61 @@ function render(){
           <span class="date-label">Start</span>
           <input type="date" class="date" data-id="${t.id}" data-type="start" value="${t.start||''}">
           <span class="date-label">Due</span>
-          <input type="date" class="date" data-id="${t.id}" data-type="due" value="${t.due||''}">
+          <input type="date" class="date" data-id="${t.id}" data-type="due"   value="${t.due||''}">
         </div>
-        ${t.checklist && t.checklist.length ? `<ul>${t.checklist.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+        ${
+          t.checklist && t.checklist.length
+          ? `<ul>` + t.checklist.map((txt,idx)=>`
+              <li class="${t.parts[idx]?'part-done':''}">
+                <input class="check partbox" type="checkbox" data-id="${t.id}" data-idx="${idx}" ${t.parts[idx]?'checked':''}/>
+                ${txt}
+              </li>`).join('') + `</ul>`
+          : ''
+        }
       `;
-      board.appendChild(col); // ensure column is appended before cards
-      col.appendChild(c);
+      col.appendChild(card);
     });
-    if(!tasks.length) board.appendChild(col); // still append empty column
+
+    board.appendChild(col);
   });
 
-  // Wire up interactions
+  // wiring: dates
   document.querySelectorAll('input.date').forEach(inp=>{
-    inp.addEventListener('change', e=>{
-      const id = inp.dataset.id, typ = inp.dataset.type;
-      const task = MASTER.tasks.find(x=>x.id===id);
-      task[typ] = inp.value || null;
+    inp.addEventListener('change', ()=>{
+      const t = MASTER.tasks.find(x=>x.id===inp.dataset.id);
+      t[inp.dataset.type] = inp.value || null;
       saveLocalState();
     });
   });
+
+  // wiring: task done
   document.querySelectorAll('input.donebox').forEach(box=>{
-    box.addEventListener('change', e=>{
-      const id = box.dataset.id;
-      const task = MASTER.tasks.find(x=>x.id===id);
-      task.done = box.checked;
-      box.closest('.card').classList.toggle('done', box.checked);
+    box.addEventListener('change', ()=>{
+      const t = MASTER.tasks.find(x=>x.id===box.dataset.id);
+      t.done = box.checked;
       saveLocalState();
-      render(); // refresh progress counters
+      render(); // refresh progress + strike-throughs
+    });
+  });
+
+  // wiring: checklist parts
+  document.querySelectorAll('input.partbox').forEach(pb=>{
+    pb.addEventListener('change', ()=>{
+      const t   = MASTER.tasks.find(x=>x.id===pb.dataset.id);
+      const idx = Number(pb.dataset.idx);
+      if (!Array.isArray(t.parts)) t.parts=[];
+      t.parts[idx] = pb.checked;
+      saveLocalState();
+      render(); // recompute task/bucket completion
     });
   });
 }
 
-/* Export CSV (dates + done) */
+/* Export CSV (dates + computed done) */
 function exportCSV(){
   const rows = [["Task ID","Title","Bucket","Label","Start","Due","Done"]];
   MASTER.tasks.forEach(t=>{
-    rows.push([t.id,t.title,t.bucket.trim(),t.label||"",t.start||"",t.due||"",t.done?"Yes":"No"]);
+    rows.push([t.id,t.title,t.bucket.trim(),t.label||"",t.start||"",t.due||"",isTaskDone(t)?"Yes":"No"]);
   });
   const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
   const blob = new Blob([csv],{type:"text/csv"});
