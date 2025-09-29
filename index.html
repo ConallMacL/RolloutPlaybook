@@ -52,6 +52,37 @@
   .col.info{ background:var(--info-bg); border-color:var(--info-border) }
   .card.info{ background:#fff; border-color:#dbeafe; box-shadow: inset 0 0 0 2px var(--info-ring) }
   .info-note{ color:#475569; font-size:.9rem; margin:6px 0 0 }
+/* Base tag style */
+.tag{
+  display:inline-block;
+  font-size:.72rem;
+  padding:.15rem .5rem;
+  border-radius:999px;
+  margin-left:6px;
+  border:1px solid transparent;
+}
+
+/* Role-specific colours */
+.tag.slt{
+  background:#e0f2fe;   /* light blue */
+  color:#075985;
+  border-color:#7dd3fc;
+}
+.tag.dla{
+  background:#fef9c3;   /* light yellow */
+  color:#713f12;
+  border-color:#fde047;
+}
+.tag.it{
+  background:#dcfce7;   /* light green */
+  color:#166534;
+  border-color:#86efac;
+}
+.tag.digital-lead{
+  background:#fce7f3;   /* light pink/purple */
+  color:#831843;
+  border-color:#f9a8d4;
+}
 
   @media print{
     header,.legend,footer{display:none}
@@ -203,7 +234,7 @@ function render(){
 
       if(isInfo){
         card.innerHTML = `
-          <div class="task-title"><span>${t.title}${t.label?` <span class="tag">${t.label}</span>`:''}</span></div>
+          <div class="task-title"><span>${t.title}${t.label?` <span class="tag ${t.label.toLowerCase()}">${t.label}</span>`:''}</span></div>
           ${t.notes?`<div class="info-note">${t.notes}</div>`:''}
           ${t.checklist && t.checklist.length ? `<ul>${t.checklist.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
         `;
@@ -211,7 +242,7 @@ function render(){
         card.innerHTML = `
           <div class="task-title">
             <input type="checkbox" class="donebox" data-id="${t.id}" ${t.done?'checked':''}/>
-            <span>${t.title}${t.label?` <span class="tag">${t.label}</span>`:''}</span>
+            <span>${t.title}${t.label?` <span class="tag ${t.label.toLowerCase()}">${t.label}</span>`:''}</span>
           </div>
           ${t.notes?`<div class="notes">${t.notes}</div>`:''}
           <div class="meta">
