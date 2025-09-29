@@ -9,7 +9,7 @@
     /* Cognita-adjacent palette */
     --navy:#0e223f; --teal:#00ffbb; --coral:#ff6b6b;
     --ink:#101828; --muted:#667085;
-    --bg:#f5f7fb; --card:#ffffff; --line:#e5e7eb; --chip:#eef2ff; --role:#e9f8f6;
+    --bg:#f5f7fb; --card:#ffffff; --line:#e5e7eb; --chip:#eef2ff;
     --info-bg:#f8fbff; --info-border:#cfe3ff; --info-ring:#eff6ff;
   }
   *{box-sizing:border-box}
@@ -34,7 +34,6 @@
   .card{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
   .task-title{display:flex;align-items:center;gap:8px;font-weight:600;margin:0 0 6px}
   .task-title input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
-  .tag{display:inline-block;font-size:.72rem;background:var(--role);padding:.15rem .5rem;border-radius:999px;color:#0b4d47;margin-left:6px;border:1px solid #bce7df}
   .notes{color:#475569;margin:6px 0}
 
   .meta{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
@@ -52,37 +51,21 @@
   .col.info{ background:var(--info-bg); border-color:var(--info-border) }
   .card.info{ background:#fff; border-color:#dbeafe; box-shadow: inset 0 0 0 2px var(--info-ring) }
   .info-note{ color:#475569; font-size:.9rem; margin:6px 0 0 }
-/* Base tag style */
-.tag{
-  display:inline-block;
-  font-size:.72rem;
-  padding:.15rem .5rem;
-  border-radius:999px;
-  margin-left:6px;
-  border:1px solid transparent;
-}
 
-/* Role-specific colours */
-.tag.slt{
-  background:#e0f2fe;   /* light blue */
-  color:#075985;
-  border-color:#7dd3fc;
-}
-.tag.dla{
-  background:#fef9c3;   /* light yellow */
-  color:#713f12;
-  border-color:#fde047;
-}
-.tag.it{
-  background:#dcfce7;   /* light green */
-  color:#166534;
-  border-color:#86efac;
-}
-.tag.digital-lead{
-  background:#fce7f3;   /* light pink/purple */
-  color:#831843;
-  border-color:#f9a8d4;
-}
+  /* Base tag style (no background here; role classes supply colour) */
+  .tag{
+    display:inline-block;
+    font-size:.72rem;
+    padding:.15rem .5rem;
+    border-radius:999px;
+    margin-left:6px;
+    border:1px solid transparent;
+  }
+  /* Role-specific colours */
+  .tag.slt{           background:#e0f2fe; color:#075985; border-color:#7dd3fc; }
+  .tag.dla{           background:#fef9c3; color:#713f12; border-color:#fde047; }
+  .tag.it{            background:#dcfce7; color:#166534; border-color:#86efac; }
+  .tag.digital-lead{  background:#fce7f3; color:#831843; border-color:#f9a8d4; }
 
   @media print{
     header,.legend,footer{display:none}
@@ -117,8 +100,7 @@
 </footer>
 
 <script>
-/* ===== MASTER TASK DATA =====
-   Replace the tasks array with your latest master if needed. */
+/* ===== MASTER TASK DATA ===== */
 const MASTER = {"generated_from":"Rollout Playbook (1).xlsx","tasks":[
 {"id":"1vhy_lhX6EyJS1UjZLY0OpYACA9d","title":"Technical - IT","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":"2026-02-22","start":null},
 {"id":"2j-j36sTh02tVJ3GreVJ35YAOaA1","title":"Identify goals and objectives","bucket":"Prepping for Rollout","label":"Digital Lead","notes":"","checklist":["Review CPD content — confident staff will know what to do on Day 1.","Share pupil induction lessons (iPad care, agreements).","Staff understand process/system around breakages.","Promote Apple Teacher programme to staff.","Adapt Comms for your school to parents"],"due":null,"start":null},
@@ -140,7 +122,7 @@ const MASTER = {"generated_from":"Rollout Playbook (1).xlsx","tasks":[
 
 /* ===== helpers/state ===== */
 const BUCKET_ORDER = ["Prepping for Rollout","Rollout","After Rollout","Roles "];
-const INFO_BUCKET = "Roles ";                        // render as FYI
+const INFO_BUCKET = "Roles ";
 const PLAN_KEY = new URLSearchParams(location.search).get('plan') || 'default';
 const STORAGE_KEY = `playbook_${PLAN_KEY}`;
 
@@ -219,7 +201,7 @@ function render(){
                    ${isInfo?'':`<div class="progress">${doneCount}/${tasks.length} done</div>`}`;
 
     tasks.forEach(t=>{
-      // parts array aligned to checklist
+      // align parts to checklist
       if(Array.isArray(t.checklist) && t.checklist.length){
         if(!Array.isArray(t.parts)) t.parts=Array(t.checklist.length).fill(false);
         if(t.parts.length!==t.checklist.length){
@@ -229,12 +211,16 @@ function render(){
         }
       }else{ t.parts=[]; }
 
+      // build role pill class safely
+      const roleClass = t.label ? t.label.toLowerCase().replace(/\s+/g,'-') : '';
+      const roleTag = t.label ? ` <span class="tag ${roleClass}">${t.label}</span>` : '';
+
       const card=document.createElement('div');
       card.className='card'+(isInfo?' info':(isTaskDone(t)?' done':''));
 
       if(isInfo){
         card.innerHTML = `
-          <div class="task-title"><span>${t.title}${t.label?` <span class="tag ${t.label   ? ` <span class="tag ${t.label.toLowerCase().replace(/\s+/g,'-')}">${t.label}</span>`   : '' }">${t.label}</span>`:''}</span></div>
+          <div class="task-title"><span>${t.title}${roleTag}</span></div>
           ${t.notes?`<div class="info-note">${t.notes}</div>`:''}
           ${t.checklist && t.checklist.length ? `<ul>${t.checklist.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
         `;
@@ -242,7 +228,7 @@ function render(){
         card.innerHTML = `
           <div class="task-title">
             <input type="checkbox" class="donebox" data-id="${t.id}" ${t.done?'checked':''}/>
-            <span>${t.title}${t.label?` <span class="tag ${t.label   ? ` <span class="tag ${t.label.toLowerCase().replace(/\s+/g,'-')}">${t.label}</span>`   : '' }">${t.label}</span>`:''}</span>
+            <span>${t.title}${roleTag}</span>
           </div>
           ${t.notes?`<div class="notes">${t.notes}</div>`:''}
           <div class="meta">
