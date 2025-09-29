@@ -1,0 +1,221 @@
+{
+  "generated_from": "Rollout Playbook (1).xlsx",
+  "tasks": [
+    {
+      "id": "1vhy_lhX6EyJS1UjZLY0OpYACA9d",
+      "title": "Technical - IT",
+      "bucket": "Roles ",
+      "label": null,
+      "notes": "",
+      "checklist": [],
+      "due": "2026-02-22",
+      "start": null
+    },
+    {
+      "id": "2j-j36sTh02tVJ3GreVJ35YAOaA1",
+      "title": "Identify goals and objectives",
+      "bucket": "Prepping for Rollout",
+      "label": "Digital Lead",
+      "notes": "",
+      "checklist": [
+        "Review CPD content — confident staff will know what to do on Day 1.",
+        "Share pupil induction lessons (iPad care, agreements).",
+        "Staff understand process/system around breakages.",
+        "Promote Apple Teacher programme to staff.",
+        "Adapt Comms for your school to parents"
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "8mlMW5no8kqwdD4fU8bE1JYABG50",
+      "title": "SLT",
+      "bucket": "Rollout",
+      "label": "SLT",
+      "notes": "",
+      "checklist": [
+        "Student agreements signed and logged.",
+        "Senior SLT link identified to support and guide the Digital Lead.",
+        "All SLT onboard with Narrative (read/adapt cheat sheet!)",
+        "Lead visible messaging: “This is about teaching and learning, not tech."
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "D-AqqtD09U2I7G1xbrmEfJYAKwWx",
+      "title": "Strategic - Cross-School/Outside Liaison*- DLA",
+      "bucket": "Roles ",
+      "label": null,
+      "notes": "Also available to support Digital Learning Lead upon request.",
+      "checklist": [],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "Ew1S2s5k1kyxXy3cptZD9ZYAPFsj",
+      "title": "Ownership/Vision/Operational Oversight - SLT",
+      "bucket": "Roles ",
+      "label": null,
+      "notes": "",
+      "checklist": [],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "GAh6fcINTE2xu88ypBAUwJYADL3E",
+      "title": "IT",
+      "bucket": "Rollout",
+      "label": "IT",
+      "notes": "",
+      "checklist": [
+        "First Weeks - on hand to support troubleshooting. Share solutions to common problems.",
+        "Regularly review (with SLT + DL) to resolve issues quickly.",
+        "Confirm apps are deployed and accessible. Devices are working as expected in the classroom."
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "KaBwb0El5k62tR-tsVs015YAMFix",
+      "title": "Digital Lead",
+      "bucket": "Rollout",
+      "label": "Digital Lead",
+      "notes": "",
+      "checklist": [
+        "First point of contact for staff queries around Pedagogy.",
+        "Lead day-to-day CPD sessions in school (short inputs, Apple Teacher nudges).",
+        "Gauge staff digital maturity in an ongoing manner"
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "LOiolTKpcEOQSQy9fW0SNJYAOuLs",
+      "title": "Digital Lead",
+      "bucket": "After Rollout",
+      "label": "Digital Lead",
+      "notes": "",
+      "checklist": [
+        "Onboard and mentor Digital Champions and Ambassadors.",
+        "Ensure digital practice is becoming embedded across year groups and departments.",
+        "Identify Best Practice."
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "Qw-LE4-ddEWoo_bXKUptT5YAMU7Y",
+      "title": "SLT",
+      "bucket": "After Rollout",
+      "label": "SLT",
+      "notes": "",
+      "checklist": [
+        "Check in with stakeholders to direct future of digital learning.",
+        "Review digital learning impact as part of routine leadership review.",
+        "Continue proactive comms with parents and governors to show progress and value.",
+        "Embed digital into the School Development/Improvement Plan"
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "aTHwxoCfLUO_2V-uGHmZMZYACUQ3",
+      "title": "DLA",
+      "bucket": "Rollout",
+      "label": "DLA",
+      "notes": "",
+      "checklist": [
+        "Check-ins with Digital Leads - 'How can I help?'",
+        "Troubleshoot barriers with DL/SLT/IT - add to existing resources to improve rollout system.",
+        "Co-deliver CPD sessions: frame pedagogy (MECC/PICRAT) and model Apple workflows."
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "hWXZpBzPD0SWD2QFqJIPRpYAK1vF",
+      "title": "School Leadership",
+      "bucket": "Prepping for Rollout",
+      "label": "SLT",
+      "notes": "These are the whats, always think, 'who needs to know?'",
+      "checklist": [
+        "Who leads on these key strands: arranging CPD, pupil induction, parent comms, apps.",
+        "Parents have received clear comms (expectations, support, 5Ws).",
+        "Parents are clearly informed of the procedure around breakages (repairs, costs, replacement timeline",
+        "Training dates are scheduled and communicated to staff."
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "oGVukcdBEUKKDMGCeSvQCpYAKwe1",
+      "title": "DLA",
+      "bucket": "After Rollout",
+      "label": "DLA",
+      "notes": "",
+      "checklist": [
+        "DMS - Digital Lead and relevant SLT informed",
+        "Arrange/Plan sessions for Digital Lead and Champions",
+        "Support Innovation projects.",
+        "Identify & Promote best practice - case study"
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "sGuhNgGNXkaJcjY12fDr05YAMElz",
+      "title": "DLA",
+      "bucket": "Prepping for Rollout",
+      "label": "DLA",
+      "notes": "",
+      "checklist": [
+        "Check expectations and clarify support with SLT.",
+        "Provide Rollout Resource Pack"
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "v5u087LLQ0OK6iIMp80pxpYAF7VI",
+      "title": "Operational and in-school - Digital Learning Lead",
+      "bucket": "Roles ",
+      "label": null,
+      "notes": "",
+      "checklist": [],
+      "due": "2025-11-22",
+      "start": null
+    },
+    {
+      "id": "wC-KABIUakeZnOCx1HcyPZYABOti",
+      "title": "IT",
+      "bucket": "After Rollout",
+      "label": "IT",
+      "notes": "",
+      "checklist": [
+        "Maintenance: Updates, Safeguarding, Security.",
+        "Termly check ins to ensure alignment.",
+        "Support expansion and streamlining of core apps in line with curriculum needs.",
+        "Reflect on this year's rollout to inform best practice next AY."
+      ],
+      "due": null,
+      "start": null
+    },
+    {
+      "id": "y4tR6fEZQE2SRFzZFXfxI5YAGd0B",
+      "title": "IT",
+      "bucket": "Prepping for Rollout",
+      "label": "IT",
+      "notes": "",
+      "checklist": [
+        "Devices built/configured and core apps pushed to self-service.",
+        "CPD date confirmed so IT can provide support.",
+        "Any risks/setbacks in device readiness communicated to SLT.",
+        "School are aware of policies on breakages.",
+        "Are AppleTVs installed and staff able to Airplay."
+      ],
+      "due": null,
+      "start": null
+    }
+  ]
+}
