@@ -1,221 +1,197 @@
-{
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Digital Rollout Playbook</title>
+<style>
+  :root{
+    --bg:#f6f8fc; --card:#fff; --ink:#101828; --muted:#667085;
+    --line:#e5e7eb; --chip:#eef2ff; --accent:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial}
+  header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px 20px}
+  h1{font-size:1.25rem;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:.92rem}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button,label.btn{background:#111827;color:#fff;border:0;border-radius:10px;padding:8px 12px;cursor:pointer}
+  label.btn input{display:none}
+  main{padding:16px 20px}
+  .grid{max-width:1200px;margin:0 auto;display:grid;gap:16px;grid-template-columns:repeat(4,1fr)}
+  @media (max-width:1100px){.grid{grid-template-columns:1fr}}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+  .kicker{font-size:.72rem;letter-spacing:.06em;color:#334155;text-transform:uppercase}
+  .col h2{margin:2px 0 8px;font-size:1.05rem}
+  .card{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+  .task-title{font-weight:600;margin:0 0 6px}
+  .tag{display:inline-block;font-size:.72rem;background:var(--chip);padding:.15rem .5rem;border-radius:999px;color:#374151;margin-left:6px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+  input[type="date"]{border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+  ul{margin:8px 0 0 18px}
+  .legend{max-width:1200px;margin:12px auto;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:12px}
+  footer{max-width:1200px;margin:6px auto 20px;color:var(--muted);font-size:.85rem;padding:0 20px}
+  @media print{
+    header,.controls,.legend,footer{display:none}
+    main{padding:0}
+    .grid{grid-template-columns:1fr 1fr 1fr}
+    .col{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Digital Rollout Playbook</h1>
+    <div class="sub">Before → During → After • Set school-specific dates • Save/Load JSON • Optional <code>?plan=arp.json</code></div>
+    <div class="controls">
+      <button onclick="saveJSON()">Download current plan (.json)</button>
+      <label class="btn">Load plan JSON<input type="file" accept=".json" onchange="loadJSON(this)"></label>
+      <button onclick="clearDates()">Clear all dates</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="board" class="grid"></section>
+  <div class="legend">
+    <strong>Roles</strong> — Labels map to responsibilities: <em>SLT</em> (Sponsors/Owners), <em>Digital Lead</em> (Anchor/Innovator),
+    <em>IT</em> (Enablers/Sustainers), <em>DLA</em> (Guide/Critical Friend).
+  </div>
+</main>
+
+<footer>
+  © Cognita Digital Learning • This page stores dates only; tasks/checklists are embedded as the master template.
+</footer>
+
+<script>
+/* ====== MASTER DATA (your JSON pasted below) ====== */
+const MASTER = {
   "generated_from": "Rollout Playbook (1).xlsx",
   "tasks": [
-    {
-      "id": "1vhy_lhX6EyJS1UjZLY0OpYACA9d",
-      "title": "Technical - IT",
-      "bucket": "Roles ",
-      "label": null,
-      "notes": "",
-      "checklist": [],
-      "due": "2026-02-22",
-      "start": null
-    },
-    {
-      "id": "2j-j36sTh02tVJ3GreVJ35YAOaA1",
-      "title": "Identify goals and objectives",
-      "bucket": "Prepping for Rollout",
-      "label": "Digital Lead",
-      "notes": "",
-      "checklist": [
-        "Review CPD content — confident staff will know what to do on Day 1.",
-        "Share pupil induction lessons (iPad care, agreements).",
-        "Staff understand process/system around breakages.",
-        "Promote Apple Teacher programme to staff.",
-        "Adapt Comms for your school to parents"
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "8mlMW5no8kqwdD4fU8bE1JYABG50",
-      "title": "SLT",
-      "bucket": "Rollout",
-      "label": "SLT",
-      "notes": "",
-      "checklist": [
-        "Student agreements signed and logged.",
-        "Senior SLT link identified to support and guide the Digital Lead.",
-        "All SLT onboard with Narrative (read/adapt cheat sheet!)",
-        "Lead visible messaging: “This is about teaching and learning, not tech."
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "D-AqqtD09U2I7G1xbrmEfJYAKwWx",
-      "title": "Strategic - Cross-School/Outside Liaison*- DLA",
-      "bucket": "Roles ",
-      "label": null,
-      "notes": "Also available to support Digital Learning Lead upon request.",
-      "checklist": [],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "Ew1S2s5k1kyxXy3cptZD9ZYAPFsj",
-      "title": "Ownership/Vision/Operational Oversight - SLT",
-      "bucket": "Roles ",
-      "label": null,
-      "notes": "",
-      "checklist": [],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "GAh6fcINTE2xu88ypBAUwJYADL3E",
-      "title": "IT",
-      "bucket": "Rollout",
-      "label": "IT",
-      "notes": "",
-      "checklist": [
-        "First Weeks - on hand to support troubleshooting. Share solutions to common problems.",
-        "Regularly review (with SLT + DL) to resolve issues quickly.",
-        "Confirm apps are deployed and accessible. Devices are working as expected in the classroom."
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "KaBwb0El5k62tR-tsVs015YAMFix",
-      "title": "Digital Lead",
-      "bucket": "Rollout",
-      "label": "Digital Lead",
-      "notes": "",
-      "checklist": [
-        "First point of contact for staff queries around Pedagogy.",
-        "Lead day-to-day CPD sessions in school (short inputs, Apple Teacher nudges).",
-        "Gauge staff digital maturity in an ongoing manner"
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "LOiolTKpcEOQSQy9fW0SNJYAOuLs",
-      "title": "Digital Lead",
-      "bucket": "After Rollout",
-      "label": "Digital Lead",
-      "notes": "",
-      "checklist": [
-        "Onboard and mentor Digital Champions and Ambassadors.",
-        "Ensure digital practice is becoming embedded across year groups and departments.",
-        "Identify Best Practice."
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "Qw-LE4-ddEWoo_bXKUptT5YAMU7Y",
-      "title": "SLT",
-      "bucket": "After Rollout",
-      "label": "SLT",
-      "notes": "",
-      "checklist": [
-        "Check in with stakeholders to direct future of digital learning.",
-        "Review digital learning impact as part of routine leadership review.",
-        "Continue proactive comms with parents and governors to show progress and value.",
-        "Embed digital into the School Development/Improvement Plan"
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "aTHwxoCfLUO_2V-uGHmZMZYACUQ3",
-      "title": "DLA",
-      "bucket": "Rollout",
-      "label": "DLA",
-      "notes": "",
-      "checklist": [
-        "Check-ins with Digital Leads - 'How can I help?'",
-        "Troubleshoot barriers with DL/SLT/IT - add to existing resources to improve rollout system.",
-        "Co-deliver CPD sessions: frame pedagogy (MECC/PICRAT) and model Apple workflows."
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "hWXZpBzPD0SWD2QFqJIPRpYAK1vF",
-      "title": "School Leadership",
-      "bucket": "Prepping for Rollout",
-      "label": "SLT",
-      "notes": "These are the whats, always think, 'who needs to know?'",
-      "checklist": [
-        "Who leads on these key strands: arranging CPD, pupil induction, parent comms, apps.",
-        "Parents have received clear comms (expectations, support, 5Ws).",
-        "Parents are clearly informed of the procedure around breakages (repairs, costs, replacement timeline",
-        "Training dates are scheduled and communicated to staff."
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "oGVukcdBEUKKDMGCeSvQCpYAKwe1",
-      "title": "DLA",
-      "bucket": "After Rollout",
-      "label": "DLA",
-      "notes": "",
-      "checklist": [
-        "DMS - Digital Lead and relevant SLT informed",
-        "Arrange/Plan sessions for Digital Lead and Champions",
-        "Support Innovation projects.",
-        "Identify & Promote best practice - case study"
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "sGuhNgGNXkaJcjY12fDr05YAMElz",
-      "title": "DLA",
-      "bucket": "Prepping for Rollout",
-      "label": "DLA",
-      "notes": "",
-      "checklist": [
-        "Check expectations and clarify support with SLT.",
-        "Provide Rollout Resource Pack"
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "v5u087LLQ0OK6iIMp80pxpYAF7VI",
-      "title": "Operational and in-school - Digital Learning Lead",
-      "bucket": "Roles ",
-      "label": null,
-      "notes": "",
-      "checklist": [],
-      "due": "2025-11-22",
-      "start": null
-    },
-    {
-      "id": "wC-KABIUakeZnOCx1HcyPZYABOti",
-      "title": "IT",
-      "bucket": "After Rollout",
-      "label": "IT",
-      "notes": "",
-      "checklist": [
-        "Maintenance: Updates, Safeguarding, Security.",
-        "Termly check ins to ensure alignment.",
-        "Support expansion and streamlining of core apps in line with curriculum needs.",
-        "Reflect on this year's rollout to inform best practice next AY."
-      ],
-      "due": null,
-      "start": null
-    },
-    {
-      "id": "y4tR6fEZQE2SRFzZFXfxI5YAGd0B",
-      "title": "IT",
-      "bucket": "Prepping for Rollout",
-      "label": "IT",
-      "notes": "",
-      "checklist": [
-        "Devices built/configured and core apps pushed to self-service.",
-        "CPD date confirmed so IT can provide support.",
-        "Any risks/setbacks in device readiness communicated to SLT.",
-        "School are aware of policies on breakages.",
-        "Are AppleTVs installed and staff able to Airplay."
-      ],
-      "due": null,
-      "start": null
-    }
+    {"id":"1vhy_lhX6EyJS1UjZLY0OpYACA9d","title":"Technical - IT","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":"2026-02-22","start":null},
+    {"id":"2j-j36sTh02tVJ3GreVJ35YAOaA1","title":"Identify goals and objectives","bucket":"Prepping for Rollout","label":"Digital Lead","notes":"","checklist":["Review CPD content — confident staff will know what to do on Day 1.","Share pupil induction lessons (iPad care, agreements).","Staff understand process/system around breakages.","Promote Apple Teacher programme to staff.","Adapt Comms for your school to parents"],"due":null,"start":null},
+    {"id":"8mlMW5no8kqwdD4fU8bE1JYABG50","title":"SLT","bucket":"Rollout","label":"SLT","notes":"","checklist":["Student agreements signed and logged.","Senior SLT link identified to support and guide the Digital Lead.","All SLT onboard with Narrative (read/adapt cheat sheet!)","Lead visible messaging: “This is about teaching and learning, not tech."],"due":null,"start":null},
+    {"id":"D-AqqtD09U2I7G1xbrmEfJYAKwWx","title":"Strategic - Cross-School/Outside Liaison*- DLA","bucket":"Roles ","label":null,"notes":"Also available to support Digital Learning Lead upon request.","checklist":[],"due":null,"start":null},
+    {"id":"Ew1S2s5k1kyxXy3cptZD9ZYAPFsj","title":"Ownership/Vision/Operational Oversight - SLT","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":null,"start":null},
+    {"id":"GAh6fcINTE2xu88ypBAUwJYADL3E","title":"IT","bucket":"Rollout","label":"IT","notes":"","checklist":["First Weeks - on hand to support troubleshooting. Share solutions to common problems.","Regularly review (with SLT + DL) to resolve issues quickly.","Confirm apps are deployed and accessible. Devices are working as expected in the classroom."],"due":null,"start":null},
+    {"id":"KaBwb0El5k62tR-tsVs015YAMFix","title":"Digital Lead","bucket":"Rollout","label":"Digital Lead","notes":"","checklist":["First point of contact for staff queries around Pedagogy.","Lead day-to-day CPD sessions in school (short inputs, Apple Teacher nudges).","Gauge staff digital maturity in an ongoing manner"],"due":null,"start":null},
+    {"id":"LOiolTKpcEOQSQy9fW0SNJYAOuLs","title":"Digital Lead","bucket":"After Rollout","label":"Digital Lead","notes":"","checklist":["Onboard and mentor Digital Champions and Ambassadors.","Ensure digital practice is becoming embedded across year groups and departments.","Identify Best Practice."],"due":null,"start":null},
+    {"id":"Qw-LE4-ddEWoo_bXKUptT5YAMU7Y","title":"SLT","bucket":"After Rollout","label":"SLT","notes":"","checklist":["Check in with stakeholders to direct future of digital learning.","Review digital learning impact as part of routine leadership review.","Continue proactive comms with parents and governors to show progress and value.","Embed digital into the School Development/Improvement Plan"],"due":null,"start":null},
+    {"id":"aTHwxoCfLUO_2V-uGHmZMZYACUQ3","title":"DLA","bucket":"Rollout","label":"DLA","notes":"","checklist":["Check-ins with Digital Leads - 'How can I help?'","Troubleshoot barriers with DL/SLT/IT - add to existing resources to improve rollout system.","Co-deliver CPD sessions: frame pedagogy (MECC/PICRAT) and model Apple workflows."],"due":null,"start":null},
+    {"id":"hWXZpBzPD0SWD2QFqJIPRpYAK1vF","title":"School Leadership","bucket":"Prepping for Rollout","label":"SLT","notes":"These are the whats, always think, 'who needs to know?'","checklist":["Who leads on these key strands: arranging CPD, pupil induction, parent comms, apps.","Parents have received clear comms (expectations, support, 5Ws).","Parents are clearly informed of the procedure around breakages (repairs, costs, replacement timeline","Training dates are scheduled and communicated to staff."],"due":null,"start":null},
+    {"id":"oGVukcdBEUKKDMGCeSvQCpYAKwe1","title":"DLA","bucket":"After Rollout","label":"DLA","notes":"","checklist":["DMS - Digital Lead and relevant SLT informed","Arrange/Plan sessions for Digital Lead and Champions","Support Innovation projects.","Identify & Promote best practice - case study"],"due":null,"start":null},
+    {"id":"sGuhNgGNXkaJcjY12fDr05YAMElz","title":"DLA","bucket":"Prepping for Rollout","label":"DLA","notes":"","checklist":["Check expectations and clarify support with SLT.","Provide Rollout Resource Pack"],"due":null,"start":null},
+    {"id":"v5u087LLQ0OK6iIMp80pxpYAF7VI","title":"Operational and in-school - Digital Learning Lead","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":"2025-11-22","start":null},
+    {"id":"wC-KABIUakeZnOCx1HcyPZYABOti","title":"IT","bucket":"After Rollout","label":"IT","notes":"","checklist":["Maintenance: Updates, Safeguarding, Security.","Termly check ins to ensure alignment.","Support expansion and streamlining of core apps in line with curriculum needs.","Reflect on this year's rollout to inform best practice next AY."],"due":null,"start":null},
+    {"id":"y4tR6fEZQE2SRFzZFXfxI5YAGd0B","title":"IT","bucket":"Prepping for Rollout","label":"IT","notes":"","checklist":["Devices built/configured and core apps pushed to self-service.","CPD date confirmed so IT can provide support.","Any risks/setbacks in device readiness communicated to SLT.","School are aware of policies on breakages.","Are AppleTVs installed and staff able to Airplay."],"due":null,"start":null}
   ]
+};
+
+/* ====== RENDERING ====== */
+const BUCKET_ORDER = ["Prepping for Rollout","Rollout","After Rollout","Roles "];
+
+function byBucket(tasks){
+  const m = new Map();
+  BUCKET_ORDER.forEach(b => m.set(b, []));
+  tasks.forEach(t => m.set(t.bucket, (m.get(t.bucket)||[]).concat(t)));
+  return m;
 }
+
+function render(){
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  const grouped = byBucket(MASTER.tasks);
+  BUCKET_ORDER.forEach(bucket => {
+    const col = document.createElement('div');
+    col.className = 'col';
+    const title = bucket.trim()==="Prepping for Rollout" ? "Preparation & Alignment"
+                : bucket.trim()==="Rollout" ? "Stabilisation & Embedding"
+                : bucket.trim()==="After Rollout" ? "Sustainability & Growth"
+                : "Roles";
+    col.innerHTML = `<div class="kicker">${bucket.trim()}</div><h2>${title}</h2>`;
+    (grouped.get(bucket)||[]).forEach(t=>{
+      const c = document.createElement('div');
+      c.className = 'card';
+      c.innerHTML = `
+        <div class="task-title">${t.title}${t.label?` <span class="tag">${t.label}</span>`:''}</div>
+        ${t.notes?`<div class="notes" style="color:#475569;margin:6px 0">${t.notes}</div>`:''}
+        <div class="meta">
+          <span class="tag">Start</span>
+          <input type="date" class="date" data-id="${t.id}" data-type="start" value="${t.start||''}">
+          <span class="tag">Due</span>
+          <input type="date" class="date" data-id="${t.id}" data-type="due" value="${t.due||''}">
+        </div>
+        ${t.checklist && t.checklist.length ? `<ul>${t.checklist.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+      `;
+      col.appendChild(c);
+    });
+    board.appendChild(col);
+  });
+}
+
+/* ====== SAVE/LOAD ====== */
+function collectState(){
+  const map = Object.fromEntries(MASTER.tasks.map(t=>[String(t.id), t]));
+  document.querySelectorAll('input.date').forEach(inp=>{
+    const id = inp.dataset.id, typ = inp.dataset.type;
+    map[id][typ] = inp.value || null;
+  });
+  return { generated_from: MASTER.generated_from, tasks: MASTER.tasks };
+}
+
+function saveJSON(){
+  const blob = new Blob([JSON.stringify(collectState(), null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'school-rollout-plan.json';
+  a.click();
+}
+
+function loadJSON(input){
+  const f = input.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = e=>{
+    try{
+      const loaded = JSON.parse(e.target.result);
+      const map = Object.fromEntries((loaded.tasks||[]).map(t=>[String(t.id), t]));
+      document.querySelectorAll('input.date').forEach(inp=>{
+        const id = inp.dataset.id, typ = inp.dataset.type;
+        inp.value = (map[id] && map[id][typ]) ? map[id][typ] : "";
+      });
+      alert('Dates loaded.');
+    }catch(err){ alert('Invalid JSON'); }
+  };
+  r.readAsText(f);
+}
+
+function clearDates(){
+  document.querySelectorAll('input.date').forEach(i=>i.value='');
+}
+
+/* ====== ?plan=… loader for GitHub Pages (/plans/arp.json) ====== */
+function getQuery(name){
+  const v = new URLSearchParams(location.search).get(name);
+  return v && v.trim()!=='' ? v.trim() : null;
+}
+async function loadPlanByUrl(url){
+  try{
+    const res = await fetch(url, {cache:'no-store'});
+    if(!res.ok) throw new Error(res.statusText);
+    const loaded = await res.json();
+    const map = Object.fromEntries((loaded.tasks||[]).map(t=>[String(t.id), t]));
+    document.querySelectorAll('input.date').forEach(inp=>{
+      const id = inp.dataset.id, typ = inp.dataset.type;
+      inp.value = (map[id] && map[id][typ]) ? map[id][typ] : "";
+    });
+  }catch(e){ console.warn('Could not load plan', url, e); }
+}
+
+/* ====== BOOT ====== */
+render();
+const plan = getQuery('plan');
+if (plan) loadPlanByUrl('./plans/' + plan);
+</script>
+</body>
+</html>
