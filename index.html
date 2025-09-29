@@ -234,7 +234,7 @@ function render(){
 
       if(isInfo){
         card.innerHTML = `
-          <div class="task-title"><span>${t.title}${t.label?` <span class="tag ${t.label.toLowerCase()}">${t.label}</span>`:''}</span></div>
+          <div class="task-title"><span>${t.title}${t.label?` <span class="tag ${t.label   ? ` <span class="tag ${t.label.toLowerCase().replace(/\s+/g,'-')}">${t.label}</span>`   : '' }">${t.label}</span>`:''}</span></div>
           ${t.notes?`<div class="info-note">${t.notes}</div>`:''}
           ${t.checklist && t.checklist.length ? `<ul>${t.checklist.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
         `;
@@ -242,7 +242,7 @@ function render(){
         card.innerHTML = `
           <div class="task-title">
             <input type="checkbox" class="donebox" data-id="${t.id}" ${t.done?'checked':''}/>
-            <span>${t.title}${t.label?` <span class="tag ${t.label.toLowerCase()}">${t.label}</span>`:''}</span>
+            <span>${t.title}${t.label?` <span class="tag ${t.label   ? ` <span class="tag ${t.label.toLowerCase().replace(/\s+/g,'-')}">${t.label}</span>`   : '' }">${t.label}</span>`:''}</span>
           </div>
           ${t.notes?`<div class="notes">${t.notes}</div>`:''}
           <div class="meta">
