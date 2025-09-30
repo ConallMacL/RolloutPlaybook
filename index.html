@@ -6,7 +6,6 @@
 <title>Digital Rollout Playbook</title>
 <style>
   :root{
-    /* Cognita-adjacent palette */
     --navy:#0e223f; --teal:#00ffbb; --coral:#ff6b6b;
     --ink:#101828; --muted:#667085;
     --bg:#f5f7fb; --card:#ffffff; --line:#e5e7eb; --chip:#eef2ff;
@@ -22,6 +21,18 @@
   .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   button{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:8px 12px;cursor:pointer}
   button.secondary{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+  button:focus{outline:2px solid var(--coral); outline-offset:2px}
+
+  /* Dashboard */
+  #dashboard{margin-top:10px;display:grid;gap:10px}
+  .dash-row{display:grid;gap:10px;grid-template-columns:1fr}
+  .role-grid{display:grid;gap:10px;grid-template-columns:repeat(4,1fr)}
+  @media (max-width:900px){.role-grid{grid-template-columns:1fr 1fr}}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}
+  .stat .label{font-size:.82rem;color:#334155;margin-bottom:6px;display:flex;justify-content:space-between}
+  .meter{height:10px;background:#f1f5f9;border-radius:999px;position:relative;overflow:hidden}
+  .meter > span{display:block;height:100%;background:linear-gradient(90deg,var(--navy),#1f4b99);width:0}
+  .pct{font-variant-numeric:tabular-nums}
 
   main{padding:16px 20px}
   .grid{max-width:1200px;margin:0 auto;display:grid;gap:16px;grid-template-columns:repeat(4,1fr)}
@@ -29,19 +40,22 @@
   .col{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
   .kicker{font-size:.72rem;letter-spacing:.06em;color:#334155;text-transform:uppercase}
   .col h2{margin:2px 0 4px;font-size:1.05rem}
-  .progress{font-size:.78rem;color:var(--muted);margin-bottom:6px}
+  .progress{font-size:.82rem;color:var(--muted);margin:4px 0 6px;font-weight:600}
+
+  /* header meters inside columns */
+  .col-meter{height:8px;background:#f1f5f9;border-radius:999px;overflow:hidden;margin:-2px 0 8px}
+  .col-meter > span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),#18d4a4);width:0}
 
   .card{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
   .task-title{display:flex;align-items:center;gap:8px;font-weight:600;margin:0 0 6px}
   .task-title input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
   .notes{color:#475569;margin:6px 0}
-
   .meta{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
   input[type="date"]{border:1px solid var(--line);border-radius:8px;padding:6px 8px}
   .date-label{font-size:.72rem;background:var(--chip);padding:.15rem .5rem;border-radius:999px;color:#374151}
   ul{margin:8px 0 0 18px}
 
-  /* live (screen) styles for completion visuals */
+  /* completion visuals */
   .done .task-title,.done .notes,.done li{opacity:.6;text-decoration:line-through}
   .bucket-done .kicker, .bucket-done h2{ text-decoration:line-through; opacity:.6 }
   li.part-done{ text-decoration:line-through; opacity:.6 }
@@ -52,36 +66,31 @@
   .card.info{ background:#fff; border-color:#dbeafe; box-shadow: inset 0 0 0 2px var(--info-ring) }
   .info-note{ color:#475569; font-size:.9rem; margin:6px 0 0 }
 
-  /* Base tag (no colour here) */
-.tag{
-  display:inline-block;
-  font-size:.72rem;
-  padding:.15rem .5rem;
-  border-radius:999px;
-  margin-left:6px;
-  border:1px solid transparent;
-}
+  /* Role pills */
+  .tag{
+    display:inline-block; font-size:.72rem; padding:.15rem .5rem;
+    border-radius:999px; margin-left:6px; border:1px solid transparent;
+  }
+  .tag.slt, .tag[data-role-key="slt"]{ background:#e0f2fe; color:#075985; border-color:#7dd3fc; }
+  .tag.dla, .tag[data-role-key="dla"]{ background:#fef9c3; color:#713f12; border-color:#fde047; }
+  .tag.it,  .tag[data-role-key="it"]  { background:#dcfce7; color:#166534; border-color:#86efac; }
+  .tag.digital-lead, .tag[data-role-key="digital-lead"]{ background:#fce7f3; color:#831843; border-color:#f9a8d4; }
 
-/* Role colours — match by class OR by data attribute */
-.tag.slt, .tag[data-role-key="slt"]{
-  background:#e0f2fe; color:#075985; border-color:#7dd3fc;
-}
-.tag.dla, .tag[data-role-key="dla"]{
-  background:#fef9c3; color:#713f12; border-color:#fde047;
-}
-.tag.it, .tag[data-role-key="it"]{
-  background:#dcfce7; color:#166534; border-color:#86efac;
-}
-.tag.digital-lead, .tag[data-role-key="digital-lead"]{
-  background:#fce7f3; color:#831843; border-color:#f9a8d4;
-}
+  /* Mobile niceties */
+  @media (max-width:600px){
+    .wrap{padding:12px 14px}
+    .card{padding:10px}
+    .meta{gap:6px}
+    .date-label{display:none}
+  }
 
-
+  /* Print polish */
   @media print{
     header,.legend,footer{display:none}
     main{padding:0}
     .grid{grid-template-columns:1fr 1fr 1fr}
     .col{page-break-inside:avoid}
+    .card.done{ background:#f3f4f6 }
   }
 </style>
 </head>
@@ -91,16 +100,19 @@
     <h1>Digital Rollout Playbook</h1>
     <div class="sub">Before → During → After • Set school-specific dates • Mark tasks done • Export CSV • Print</div>
     <div class="controls">
-      <button onclick="exportCSV()">Export dates & status (CSV)</button>
-      <button class="secondary" onclick="window.print()">Print</button>
+      <button aria-label="Export dates and status as CSV" onclick="exportCSV()">Export dates & status (CSV)</button>
+      <button class="secondary" aria-label="Print this playbook" onclick="window.print()">Print</button>
+      <button class="secondary" aria-label="Copy share link with current plan parameter" onclick="copyLink()">Copy share link</button>
     </div>
   </div>
 </header>
 
+<div id="dashboard" class="wrap"></div>
+
 <main>
   <section id="board" class="grid"></section>
   <div class="legend wrap" style="margin-top:12px;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:12px">
-    <strong>Roles</strong> — Labels map to responsibilities: <em>SLT</em> (Sponsors/Owners), <em>Digital Lead</em> (Anchor/Innovator),
+    <strong>Roles</strong> — <em>SLT</em> (Sponsors/Owners), <em>Digital Lead</em> (Anchor/Innovator),
     <em>IT</em> (Enablers/Sustainers), <em>DLA</em> (Guide/Critical Friend).
   </div>
 </main>
@@ -143,10 +155,9 @@ async function loadPlanByUrl(url){
     const loaded = await res.json();
     const map = Object.fromEntries((loaded.tasks||[]).map(t=>[String(t.id),t]));
     MASTER.tasks.forEach(t=>{
-      if(map[t.id]){
-        if(map[t.id].start) t.start = map[t.id].start;
-        if(map[t.id].due)   t.due   = map[t.id].due;
-      }
+      const m = map[t.id]; if(!m) return;
+      if(m.start) t.start = m.start;
+      if(m.due)   t.due   = m.due;
     });
   }catch(_){}
 }
@@ -188,8 +199,60 @@ function byBucket(tasks){
   return m;
 }
 
-/* render */
+/* compute dashboard numbers */
+function computeProgress(){
+  const roles = ["SLT","Digital Lead","IT","DLA"];
+  const roleTotals = Object.fromEntries(roles.map(r=>[r,{done:0,total:0}]));
+  const phaseTotals = {"Prepping for Rollout":{done:0,total:0},"Rollout":{done:0,total:0},"After Rollout":{done:0,total:0}};
+  let overall = {done:0,total:0};
+
+  MASTER.tasks.forEach(t=>{
+    if(t.bucket===INFO_BUCKET) return; // ignore FYI column for progress
+    const done = isTaskDone(t);
+    phaseTotals[t.bucket].total++; if(done) phaseTotals[t.bucket].done++;
+    overall.total++; if(done) overall.done++;
+    if(t.label && roleTotals[t.label]){
+      roleTotals[t.label].total++; if(done) roleTotals[t.label].done++;
+    }
+  });
+  return {overall, roleTotals, phaseTotals};
+}
+
+/* small helper for meters */
+function pct(done,total){ return total ? Math.round((done/total)*100) : 0; }
+function meterHTML(done,total,accent=''){
+  const p = pct(done,total);
+  const style = accent ? `style="background:${accent}"` : '';
+  return `<div class="meter"><span ${style} style="width:${p}%"></span></div>
+          <div class="label" style="margin-top:6px;justify-content:flex-end"><span class="pct">${p}%</span>&nbsp;(${done}/${total})</div>`;
+}
+
+/* render dashboard */
+function renderDashboard(){
+  const d = computeProgress();
+  const dash = document.getElementById('dashboard');
+  dash.innerHTML = `
+    <div class="dash-row">
+      <div class="stat">
+        <div class="label"><strong>Overall progress</strong><span class="pct">${pct(d.overall.done,d.overall.total)}%</span></div>
+        <div class="meter"><span style="width:${pct(d.overall.done,d.overall.total)}%"></span></div>
+      </div>
+    </div>
+    <div class="role-grid">
+      ${Object.entries(d.roleTotals).map(([role,vals])=>`
+        <div class="stat">
+          <div class="label"><span>${role}</span><span class="pct">${pct(vals.done,vals.total)}%</span></div>
+          <div class="meter"><span style="width:${pct(vals.done,vals.total)}%"></span></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+/* render board */
 function render(){
+  renderDashboard();
+
   const board=document.getElementById('board');
   board.innerHTML='';
   const grouped=byBucket(MASTER.tasks);
@@ -206,12 +269,17 @@ function render(){
                : bucket.trim()==="Rollout" ? "Stabilisation & Embedding"
                : bucket.trim()==="After Rollout" ? "Sustainability & Growth"
                : "Roles";
+
+    // per-section meter
+    const sectionPct = isInfo ? 0 : Math.round((doneCount/(tasks.length||1))*100);
+
     col.innerHTML=`<div class="kicker">${bucket.trim()}</div>
                    <h2>${title}</h2>
-                   ${isInfo?'':`<div class="progress">${doneCount}/${tasks.length} done</div>`}`;
+                   ${isInfo?'':`<div class="progress">${doneCount}/${tasks.length} done</div>
+                   <div class="col-meter"><span style="width:${sectionPct}%"></span></div>`}`;
 
     tasks.forEach(t=>{
-      // align parts to checklist
+      // align parts
       if(Array.isArray(t.checklist) && t.checklist.length){
         if(!Array.isArray(t.parts)) t.parts=Array(t.checklist.length).fill(false);
         if(t.parts.length!==t.checklist.length){
@@ -220,14 +288,11 @@ function render(){
           t.parts=p;
         }
       }else{ t.parts=[]; }
-      
-// build role pill safely
-const roleRaw  = (t.label ?? '').toString().trim();
-const roleKey  = roleRaw.toLowerCase().replace(/\s+/g,'-'); // e.g. "Digital Lead" -> "digital-lead"
-const roleTag  = roleRaw
-  ? ` <span class="tag ${roleKey}" data-role="${roleRaw}" data-role-key="${roleKey}">${roleRaw}</span>`
-  : '';
 
+      // safe role pill
+      const roleRaw = (t.label ?? '').toString().trim();
+      const roleKey = roleRaw.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+      const roleTag = roleRaw ? ` <span class="tag ${roleKey}" data-role="${roleRaw}" data-role-key="${roleKey}">${roleRaw}</span>` : '';
 
       const card=document.createElement('div');
       card.className='card'+(isInfo?' info':(isTaskDone(t)?' done':''));
@@ -247,9 +312,9 @@ const roleTag  = roleRaw
           ${t.notes?`<div class="notes">${t.notes}</div>`:''}
           <div class="meta">
             <span class="date-label">Start</span>
-            <input type="date" class="date" data-id="${t.id}" data-type="start" value="${t.start||''}">
+            <input title="Changes save automatically" type="date" class="date" data-id="${t.id}" data-type="start" value="${t.start||''}">
             <span class="date-label">Due</span>
-            <input type="date" class="date" data-id="${t.id}" data-type="due" value="${t.due||''}">
+            <input title="Changes save automatically" type="date" class="date" data-id="${t.id}" data-type="due" value="${t.due||''}">
           </div>
           ${
             t.checklist && t.checklist.length
@@ -273,13 +338,13 @@ const roleTag  = roleRaw
     inp.addEventListener('change', ()=>{
       const t=MASTER.tasks.find(x=>x.id===inp.dataset.id);
       t[inp.dataset.type]=inp.value||null;
-      saveLocalState();
+      saveLocalState(); renderDashboard(); // update dash if dates imply completion later
     });
   });
   document.querySelectorAll('input.donebox').forEach(box=>{
     box.addEventListener('change', ()=>{
       const t=MASTER.tasks.find(x=>x.id===box.dataset.id);
-      t.done=box.checked; saveLocalState(); render();
+      t.done=box.checked; saveLocalState(); render(); // re-render to refresh meters
     });
   });
   document.querySelectorAll('input.partbox').forEach(pb=>{
@@ -301,6 +366,13 @@ function exportCSV(){
   const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
   const blob=new Blob([csv],{type:"text/csv"});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rollout-dates-status.csv'; a.click();
+}
+
+/* copy share link */
+function copyLink(){
+  const plan = new URLSearchParams(location.search).get('plan') || '';
+  if(!plan){ alert('Tip: add ?plan=<school>.json to the URL to share a preloaded plan.'); return; }
+  navigator.clipboard.writeText(location.href).then(()=>alert('Link copied!'));
 }
 
 /* boot */
