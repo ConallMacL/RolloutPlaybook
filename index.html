@@ -242,24 +242,59 @@ function byBucket(tasks){
   tasks.forEach(t=>m.set(t.bucket,(m.get(t.bucket)||[]).concat(t)));
   return m;
 }
+/* Count progress in units: checklist items or whole-task */
+function unitCounts(t){
+  if (t.bucket === INFO_BUCKET) return { done: 0, total: 0 };
+
+  // Task with checklist => each line is one unit
+  if (Array.isArray(t.checklist) && t.checklist.length > 0){
+    const total = t.checklist.length;
+    const parts = Array.isArray(t.parts) ? t.parts : [];
+    const doneLines = parts.filter(Boolean).length;
+
+    // If the task is marked done, count all lines as done
+    return { done: t.done ? total : doneLines, total };
+  }
+
+  // Task without checklist => the task itself is one unit
+  return { done: t.done ? 1 : 0, total: 1 };
+}
 
 /* compute dashboard numbers */
+function/* compute dashboard numbers using unit-based progress */
 function computeProgress(){
   const roles = ["SLT","Digital Lead","IT","DLA"];
-  const roleTotals = Object.fromEntries(roles.map(r=>[r,{done:0,total:0}]));
-  const phaseTotals = {"Prepping for Rollout":{done:0,total:0},"Rollout":{done:0,total:0},"After Rollout":{done:0,total:0}};
-  let overall = {done:0,total:0};
+  const roleTotals = Object.fromEntries(roles.map(r => [r, { done:0, total:0 }]));
+  const phaseTotals = {
+    "Prepping for Rollout": { done:0, total:0 },
+    "Rollout":              { done:0, total:0 },
+    "After Rollout":        { done:0, total:0 }
+  };
+  const overall = { done:0, total:0 };
 
-  MASTER.tasks.forEach(t=>{
-    if(t.bucket===INFO_BUCKET) return; // ignore FYI column for progress
-    const done = isTaskDone(t);
-    phaseTotals[t.bucket].total++; if(done) phaseTotals[t.bucket].done++;
-    overall.total++; if(done) overall.done++;
-    if(t.label && roleTotals[t.label]){
-      roleTotals[t.label].total++; if(done) roleTotals[t.label].done++;
+  MASTER.tasks.forEach(t => {
+    if (t.bucket === INFO_BUCKET) return;
+
+    const { done, total } = unitCounts(t);
+
+    // Phases
+    if (phaseTotals[t.bucket]){
+      phaseTotals[t.bucket].done  += done;
+      phaseTotals[t.bucket].total += total;
+    }
+
+    // Overall
+    overall.done  += done;
+    overall.total += total;
+
+    // Roles
+    if (t.label && roleTotals[t.label]){
+      roleTotals[t.label].done  += done;
+      roleTotals[t.label].total += total;
     }
   });
-  return {overall, roleTotals, phaseTotals};
+
+  return { overall, roleTotals, phaseTotals };
 }
 
 function pct(done,total){ return total ? Math.round((done/total)*100) : 0; }
@@ -297,22 +332,24 @@ function render(){
   BUCKET_ORDER.forEach(bucket=>{
     const tasks = grouped.get(bucket)||[];
     const isInfo = bucket===INFO_BUCKET;
-    const doneCount = isInfo ? 0 : tasks.filter(isTaskDone).length;
-    const allDone = !isInfo && tasks.length>0 && doneCount===tasks.length;
+   // Unit-based section progress
+let sectionDone = 0, sectionTotal = 0;
+if (!isInfo){
+  tasks.forEach(t => {
+    const { done, total } = unitCounts(t);
+    sectionDone  += done;
+    sectionTotal += total;
+  });
+}
+const allDone   = !isInfo && sectionTotal > 0 && sectionDone === sectionTotal;
+const sectionPct = isInfo ? 0 : Math.round((sectionDone / (sectionTotal || 1)) * 100);
 
-    const col=document.createElement('div');
-    col.className='col'+(allDone?' bucket-done':'')+(isInfo?' info':'');
-    const title = bucket.trim()==="Prepping for Rollout" ? "Preparation & Alignment"
-               : bucket.trim()==="Rollout" ? "Stabilisation & Embedding"
-               : bucket.trim()==="After Rollout" ? "Sustainability & Growth"
-               : "Roles";
+...
+${isInfo ? '' : `
+  <div class="progress">${sectionDone}/${sectionTotal} done</div>
+  <div class="col-meter"><span style="width:${sectionPct}%"></span></div>
+`}
 
-    const sectionPct = isInfo ? 0 : Math.round((doneCount/(tasks.length||1))*100);
-
-    col.innerHTML=`<div class="kicker">${bucket.trim()}</div>
-                   <h2>${title}</h2>
-                   ${isInfo?'':`<div class="progress">${doneCount}/${tasks.length} done</div>
-                   <div class="col-meter"><span style="width:${sectionPct}%"></span></div>`}`;
 
     tasks.forEach(t=>{
       // align parts
