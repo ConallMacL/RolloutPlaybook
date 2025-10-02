@@ -41,8 +41,6 @@
   .kicker{font-size:.72rem;letter-spacing:.06em;color:#334155;text-transform:uppercase}
   .col h2{margin:2px 0 4px;font-size:1.05rem}
   .progress{font-size:.82rem;color:var(--muted);margin:4px 0 6px;font-weight:600}
-
-  /* header meters inside columns */
   .col-meter{height:8px;background:#f1f5f9;border-radius:999px;overflow:hidden;margin:-2px 0 8px}
   .col-meter > span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),#18d4a4);width:0}
 
@@ -61,7 +59,7 @@
   li.part-done{ text-decoration:line-through; opacity:.6 }
   .check{ width:16px; height:16px; vertical-align:-2px; margin-right:6px; cursor:pointer }
 
-  /* Roles/FYI column visuals */
+  /* Roles/FYI column */
   .col.info{ background:var(--info-bg); border-color:var(--info-border) }
   .card.info{ background:#fff; border-color:#dbeafe; box-shadow: inset 0 0 0 2px var(--info-ring) }
   .info-note{ color:#475569; font-size:.9rem; margin:6px 0 0 }
@@ -73,10 +71,7 @@
   .tag.it{background:#dcfce7;color:#166534;border-color:#86efac}
   .tag.dla{background:#fef9c3;color:#713f12;border-color:#fde047}
 
-  /* Mobile */
   @media (max-width:600px){.wrap{padding:12px 14px}.card{padding:10px}.meta{gap:6px}.date-label{display:none}}
-
-  /* Print */
   @media print{header,.legend,footer{display:none} main{padding:0} .grid{grid-template-columns:1fr 1fr 1fr} .col{page-break-inside:avoid} .card.done{background:#f3f4f6}}
 </style>
 </head>
@@ -108,7 +103,7 @@
 </footer>
 
 <script>
-/* ===== MASTER TASK DATA (plain quotes only) ===== */
+/* ===== MASTER TASK DATA ===== */
 const MASTER = {"generated_from":"Rollout Playbook (1).xlsx","tasks":[
   {"id":"1","title":"Technical - IT","bucket":"Roles ","label":null,"notes":"","checklist":[],"due":"2026-02-22","start":null},
   {"id":"2","title":"Identify goals and objectives","bucket":"Prepping for Rollout","label":"Digital Lead","notes":"","checklist":[
@@ -242,26 +237,20 @@ function byBucket(tasks){
   tasks.forEach(t=>m.set(t.bucket,(m.get(t.bucket)||[]).concat(t)));
   return m;
 }
-/* Count progress in units: checklist items or whole-task */
+
+/* Unit-based counts: checklist items or whole task */
 function unitCounts(t){
   if (t.bucket === INFO_BUCKET) return { done: 0, total: 0 };
-
-  // Task with checklist => each line is one unit
   if (Array.isArray(t.checklist) && t.checklist.length > 0){
     const total = t.checklist.length;
     const parts = Array.isArray(t.parts) ? t.parts : [];
     const doneLines = parts.filter(Boolean).length;
-
-    // If the task is marked done, count all lines as done
     return { done: t.done ? total : doneLines, total };
   }
-
-  // Task without checklist => the task itself is one unit
   return { done: t.done ? 1 : 0, total: 1 };
 }
 
-/* compute dashboard numbers */
-function/* compute dashboard numbers using unit-based progress */
+/* compute dashboard numbers using unit-based progress */
 function computeProgress(){
   const roles = ["SLT","Digital Lead","IT","DLA"];
   const roleTotals = Object.fromEntries(roles.map(r => [r, { done:0, total:0 }]));
@@ -274,20 +263,15 @@ function computeProgress(){
 
   MASTER.tasks.forEach(t => {
     if (t.bucket === INFO_BUCKET) return;
-
     const { done, total } = unitCounts(t);
 
-    // Phases
     if (phaseTotals[t.bucket]){
       phaseTotals[t.bucket].done  += done;
       phaseTotals[t.bucket].total += total;
     }
-
-    // Overall
     overall.done  += done;
     overall.total += total;
 
-    // Roles
     if (t.label && roleTotals[t.label]){
       roleTotals[t.label].done  += done;
       roleTotals[t.label].total += total;
@@ -332,24 +316,34 @@ function render(){
   BUCKET_ORDER.forEach(bucket=>{
     const tasks = grouped.get(bucket)||[];
     const isInfo = bucket===INFO_BUCKET;
-   // Unit-based section progress
-let sectionDone = 0, sectionTotal = 0;
-if (!isInfo){
-  tasks.forEach(t => {
-    const { done, total } = unitCounts(t);
-    sectionDone  += done;
-    sectionTotal += total;
-  });
-}
-const allDone   = !isInfo && sectionTotal > 0 && sectionDone === sectionTotal;
-const sectionPct = isInfo ? 0 : Math.round((sectionDone / (sectionTotal || 1)) * 100);
 
-...
-${isInfo ? '' : `
-  <div class="progress">${sectionDone}/${sectionTotal} done</div>
-  <div class="col-meter"><span style="width:${sectionPct}%"></span></div>
-`}
+    // Unit-based section progress
+    let sectionDone = 0, sectionTotal = 0;
+    if (!isInfo){
+      tasks.forEach(t => {
+        const { done, total } = unitCounts(t);
+        sectionDone  += done;
+        sectionTotal += total;
+      });
+    }
+    const allDone   = !isInfo && sectionTotal > 0 && sectionDone === sectionTotal;
+    const sectionPct = isInfo ? 0 : Math.round((sectionDone / (sectionTotal || 1)) * 100);
 
+    const col=document.createElement('div');
+    col.className='col'+(allDone?' bucket-done':'')+(isInfo?' info':'');
+    const title = bucket.trim()==="Prepping for Rollout" ? "Preparation & Alignment"
+               : bucket.trim()==="Rollout" ? "Stabilisation & Embedding"
+               : bucket.trim()==="After Rollout" ? "Sustainability & Growth"
+               : "Roles";
+
+    col.innerHTML = `
+      <div class="kicker">${bucket.trim()}</div>
+      <h2>${title}</h2>
+      ${isInfo ? '' : `
+        <div class="progress">${sectionDone}/${sectionTotal} done</div>
+        <div class="col-meter"><span style="width:${sectionPct}%"></span></div>
+      `}
+    `;
 
     tasks.forEach(t=>{
       // align parts
@@ -457,3 +451,4 @@ function copyLink(){
 </script>
 </body>
 </html>
+
